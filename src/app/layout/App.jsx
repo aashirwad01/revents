@@ -38,14 +38,30 @@ const useStyles=makeStyles((theme)=>{
 
 function App() {
   const classes=useStyles()
+
   const [formOpen,setFormOpen]=useState(false)
+  const [selectedEvent,setSelectedEvent]=useState(null)
+
+  function handleSelectEvent(event){
+    setSelectedEvent(event)
+    setFormOpen(true)
+  }
+
+  function handleCreateFormOpen(){
+    setSelectedEvent(null)
+    setFormOpen(true)
+  }
 
   return (
     <ThemeProvider theme={theme} >
     <div >
-      <NavBar setFormOpen={setFormOpen}/>
+      <NavBar setFormOpen={handleCreateFormOpen}/>
       <Container className={classes.containingEvent}>
-      <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen}/>
+      <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} 
+      selectEvent={handleSelectEvent}
+      selectedEvent={selectedEvent}
+      
+      />
       </Container>
      
     </div>
