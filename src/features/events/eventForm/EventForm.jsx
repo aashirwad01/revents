@@ -2,7 +2,7 @@ import { Button, Card, Container, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { Box } from '@mui/material'
 
-export default function EventForm() {
+export default function EventForm({setFormOpen}) {
   return (
       
     <Card 
@@ -16,7 +16,7 @@ export default function EventForm() {
         color="primary"
         component="h2"
         gutterBottom
-        fullWidth
+        
         
         >
             Create new Event
@@ -83,7 +83,9 @@ export default function EventForm() {
         <Button sx={{mr:'0.5rem' }} type="submit" color="success" variant='contained'>
             Submit
         </Button>
-        <Button type="submit"  variant='contained'>
+        <Button type="submit"  variant='contained'
+        onClick={()=>setFormOpen(false)}
+        >
             Cancel
         </Button>
         </Box>

@@ -6,7 +6,7 @@ import NavBar from "../../features/nav/NavBar";
 import { green } from "@mui/material/colors";
 import { Container } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
+import { useState } from "react";
 
 
 
@@ -38,13 +38,14 @@ const useStyles=makeStyles((theme)=>{
 
 function App() {
   const classes=useStyles()
+  const [formOpen,setFormOpen]=useState(false)
 
   return (
     <ThemeProvider theme={theme} >
     <div >
-      <NavBar/>
+      <NavBar setFormOpen={setFormOpen}/>
       <Container className={classes.containingEvent}>
-      <EventDashboard/>
+      <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen}/>
       </Container>
      
     </div>

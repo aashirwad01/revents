@@ -27,7 +27,7 @@ const useStyles=makeStyles((theme)=>{
   }
 })
 
-export default function NavBar() {
+export default function NavBar({setFormOpen}) {
   const classes=useStyles()
 
   return (
@@ -41,8 +41,10 @@ export default function NavBar() {
             alt="Logo" 
             sx={{
               marginRight:'0.4rem',
+              
              width:58,
-             height:56
+             height:56,
+
      
            
            }} 
@@ -77,7 +79,10 @@ export default function NavBar() {
       
       }}  
         
-        className={classes.createEvents}>Create Events</Button>
+        className={classes.createEvents}
+        onClick={()=>setFormOpen(true)}
+        >Create Events
+        </Button>
         
         <Button variant="outlined" color="inherit" edge="end" 
 
