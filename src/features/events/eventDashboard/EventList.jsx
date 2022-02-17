@@ -12,7 +12,9 @@ export default function EventList(props) {
           selectEvent={props.selectEvent}
           deleteEvent={props.deleteEvent}
         />
+        
       ))}
     </Box>
   );
 }
+

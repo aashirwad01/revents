@@ -15,6 +15,7 @@ import { Typography } from "@mui/material";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import RoomIcon from "@mui/icons-material/Room";
 import EventListAttendee from "./EventListAttendee";
+import { Link } from "react-router-dom";
 
 export default function EventListItem({ event, selectEvent, deleteEvent }) {
   return (
@@ -89,14 +90,17 @@ export default function EventListItem({ event, selectEvent, deleteEvent }) {
 
           
           <Button
+            component={Link}
+            to={`/events/${event.id}`}
             sx={{ marginRight: "1rem", backgroundColor: "teal" }}
             variant="contained"
             edge="end"
-            onClick={() => selectEvent(event)}
+            // onClick={() => selectEvent(event)}
           >
             View
           </Button>
           <Button
+
             sx={{ marginRight: "1rem", backgroundColor: "red" }}
             variant="contained"
             edge="end"

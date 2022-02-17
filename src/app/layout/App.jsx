@@ -7,6 +7,10 @@ import { green } from "@mui/material/colors";
 import { Container } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
+import { Route } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
+import EventDetailedPage from "../../features/events/eventDetailed/EventDetailedPage";
+import EventForm from "../../features/events/eventForm/EventForm";
 
 
 
@@ -55,14 +59,31 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
     <div >
-      <NavBar setFormOpen={handleCreateFormOpen}/>
+    <Route exact path='/' component={HomePage} />
+    <Route path={'/(.+)'} render={()=>(
+     <>
+
+<NavBar setFormOpen={handleCreateFormOpen}/>
       <Container className={classes.containingEvent}>
-      <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} 
+       
+        <Route exact path='/events' component={EventDashboard} />
+        <Route path='/events/:id' component={EventDetailedPage} />
+        <Route path={['/create','/manage/:id']} component={EventForm} />
+        
+
+
+      {/* <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} 
       selectEvent={handleSelectEvent}
       selectedEvent={selectedEvent}
       
-      />
+      /> */}
       </Container>
+     </> 
+    
+      )}  
+    
+    />
+      
      
     </div>
     

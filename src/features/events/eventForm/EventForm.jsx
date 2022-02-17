@@ -3,6 +3,9 @@ import React from "react";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import cuid from "cuid";
+import { Link } from "react-router-dom";
+
+
 
 export default function EventForm({
   setFormOpen,
@@ -144,7 +147,7 @@ export default function EventForm({
           <Button
             type="submit"
             variant="contained"
-            onClick={() => setFormOpen(false)}
+            component={Link} to='/events'
           >
             Cancel
           </Button>
