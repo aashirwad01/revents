@@ -4,25 +4,25 @@ import InfoIcon from '@mui/icons-material/Info';
 import EventIcon from '@mui/icons-material/Event';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-export default function EventDetailInfo() {
+export default function EventDetailInfo({event}) {
   return (
       <Box>
     <Card sx={{mb:0.25}}>
         <CardContent>
         <Box
               style={{
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
               }}
             >
-              <InfoIcon style={{color:'teal'}}/>
+              <InfoIcon sx={{color:'teal',}}/>
               <span
                 style={{
                   marginLeft: "2rem",
                 }}
               >
-                Event Description
+               {event.description}
               </span>
               </Box>
         </CardContent>
@@ -39,10 +39,10 @@ export default function EventDetailInfo() {
           <EventIcon style={{color:'teal'}} />
           <span
             style={{
-              marginLeft: "2rem",
+              marginLeft: "1rem",
             }}
           >
-            Event Date
+            {event.date}
           </span>
           </Box>
     </CardContent>
@@ -58,13 +58,13 @@ export default function EventDetailInfo() {
           }}
         >
             <Box>
-           <LocationOnIcon  style={{color:'teal',position:'absolute',top:'41.2rem'}}/>
+           <LocationOnIcon  style={{color:'teal',}}/>
           <span
             style={{
-              marginLeft: "3.25rem",
+              marginLeft: "1rem",
             }}
           >
-            Event Venue
+            {event.venue}
           </span>
           </Box>
          

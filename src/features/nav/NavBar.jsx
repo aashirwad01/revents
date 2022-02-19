@@ -1,7 +1,7 @@
 import {
   Avatar,
   Button,
-  ButtonGroup,
+ 
   IconButton,
   Toolbar,
   Typography,
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => {
     appbar: {
       background:
         "linear-gradient( 135deg ,rgb(24,42,115) 0% , rgb(33,138,174) 69% , rgb(32,167,172) 89% )",
+        
     },
     avt: {
       width: 56,
@@ -30,10 +31,6 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-{
-  /* <a aria-current="page" 
-class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1q75tix-MuiButtonBase-root-MuiIconButton-root active" tabindex="0" href="/events"><h6 class="MuiTypography-root MuiTypography-h6 css-1bscfje-MuiTypography-root">Events</h6><span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span></a> */
-}
 
 export default function NavBar({ setFormOpen }) {
 
@@ -48,9 +45,9 @@ export default function NavBar({ setFormOpen }) {
   }
 
   return (
-    <AppBar position="static" className={classes.appbar}>
-      <Container>
-        <Toolbar>
+    <AppBar  position="sticky" className={classes.appbar}>
+      <Container >
+        <Toolbar >
           <IconButton
             component={NavLink}
             activeClassName="Mui-selected"
@@ -111,6 +108,32 @@ export default function NavBar({ setFormOpen }) {
               sx={{ fontSize: { xs: "0.75rem", sm: "1.5rem" } }}
             >
               Events
+            </Typography>
+          </IconButton>
+
+          <IconButton
+            sx={[
+              {
+                borderLeft: "0.2rem solid black",
+                padding: { xs: "0.25rem", md: "1rem", sm: "1rem" },
+                marginLeft: { xs: "0.25rem", md: "1rem", sm: "1rem" },
+              },
+              (theme) => ({
+                "&:active": {
+                  color: theme.palette.primary.main,
+                },
+              }),
+            ]}
+            component={NavLink}
+            to="/sandbox"
+           
+            color="inherit"
+          >
+            <Typography
+              variant="h6"
+              sx={{ fontSize: { xs: "0.75rem", sm: "1.5rem" } }}
+            >
+              Sandbox
             </Typography>
           </IconButton>
 

@@ -17,14 +17,15 @@ const eventImageStyle = {
 
 // style={eventImageTextStyle}
 
-export default function EventDetailHeader() {
+export default function EventDetailHeader({event}) {
+  const img=`/assets/categoryImages/${event.category}.jpg`
   return (
     <Card sx={{  mb:3  }}>
       <CardMedia
         component="img"
         alt="drinks"
         height="140"
-        image="/assets/categoryImages/drinks.jpg"
+        image={img}
         style={eventImageStyle}
       />
       <CardContent style={{
@@ -35,17 +36,17 @@ export default function EventDetailHeader() {
    
 }}  >
         <Typography   gutterBottom variant="h5" component="div">
-          Event Title
+          {event.title}
         </Typography>
-        <p>Event Date</p>
-        <p>Hosted By <strong>Me</strong></p>
+        <p>{event.date}</p>
+        <p>Hosted By <strong>{event.hostedBy}</strong></p>
        
       </CardContent>
       
       <CardActions sx={{display:'flex' ,justifyContent:'space-between'}}>
         <Button variant='contained'  color='grey'>Cancel My Place</Button>
         <Button  variant='contained' >Join this Event</Button>
-        <Button  component={Link} to = {`/manage/`} 
+        <Button  component={Link} to = {`/manage/${event.id}`} 
         variant='contained'  color='secondary'>Manage Event</Button>
       </CardActions>
     </Card>

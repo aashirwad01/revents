@@ -1,9 +1,6 @@
 import { Avatar, Box, Divider, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 
-{
-  /*  */
-}
 export default function EventDetailChat() {
   return (
     <Box>
@@ -15,7 +12,7 @@ export default function EventDetailChat() {
           textAlign: "center",
           padding: "10px",
           borderRadius: "3px",
-          marginTop:"1rem"
+          marginTop: "1rem",
         }}
       >
         Chat About Event

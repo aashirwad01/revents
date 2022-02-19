@@ -1,56 +1,39 @@
-import { Avatar, Box, Button, Card, CardContent, IconButton, Typography } from '@mui/material'
+import { Avatar, Box,  Card, CardContent,  Typography } from '@mui/material'
 import React from 'react'
-import InfoIcon from '@mui/icons-material/Info';
-import EventIcon from '@mui/icons-material/Event';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-export default function EventDetailSidebar() {
+export default function EventDetailSidebar({attendees}) {
   return (
       <Box sx={{ml:2}}>
         <Typography 
-     style={{color:'white',backgroundColor:'teal' , textAlign: "center" ,padding:'10px' ,borderRadius:"3px" }} >2 People Going</Typography>
-    <Card sx={{mb:0.25}}>
-        <CardContent>
-        <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              <Avatar src="/assets/user.png"
-              />
-              <span
-                style={{
-                  marginLeft: "2rem",
-                }}
-              >
-                Tom
-              </span>
-              </Box>
-        </CardContent>
-    </Card>
-    <Card sx={{mb:0.25}}>
-    <CardContent>
-    <Box
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-           <Avatar src="/assets/user.png"
-              />
-          <span
-            style={{
-              marginLeft: "2rem",
-            }}
-          >
-            Bob
-          </span>
-          </Box>
-    </CardContent>
+     style={{color:'white',backgroundColor:'teal' , textAlign: "center" ,padding:'10px' ,borderRadius:"3px" }} >{attendees.length} {attendees.length>1?'People':'Person'} Going</Typography>
+
+     {attendees.map(attendee =>(
+
+<Card key={attendee.id} sx={{mb:0.25}}>
+<CardContent>
+<Box
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+      }}
+    >
+      <Avatar src={attendee.photoURL || `/assets/user.png`}
+      />
+      <span
+        style={{
+          marginLeft: "2rem",
+        }}
+      >
+        {attendee.displayName}
+      </span>
+      </Box>
+</CardContent>
 </Card>
+
+     ))}
+   
+    
 
 </Box>
   )

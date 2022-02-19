@@ -8,7 +8,7 @@ import {
   Divider,
   List,
   ListItem,
-  Paper,
+ 
 } from "@mui/material";
 import React from "react";
 import { Typography } from "@mui/material";
@@ -16,8 +16,15 @@ import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import RoomIcon from "@mui/icons-material/Room";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteEvent } from "../eventActions";
 
-export default function EventListItem({ event, selectEvent, deleteEvent }) {
+
+
+export default function EventListItem({ event }) {
+
+  const dispatch =useDispatch()
+
   return (
     <div>
       <Box>
@@ -104,7 +111,7 @@ export default function EventListItem({ event, selectEvent, deleteEvent }) {
             sx={{ marginRight: "1rem", backgroundColor: "red" }}
             variant="contained"
             edge="end"
-            onClick={() => deleteEvent(event.id)}
+            onClick={() => dispatch(deleteEvent(event.id))}
           >
             Delete
           </Button>

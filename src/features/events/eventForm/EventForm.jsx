@@ -1,19 +1,20 @@
-import { Button, Card, Container, TextField, Typography } from "@mui/material";
+import { Button, Card,  TextField, Typography } from "@mui/material";
 import React from "react";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import cuid from "cuid";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createEvent, updateEvent } from "../eventActions";
 
+export default function EventForm({ match , history }) {
 
+  const dispatch=useDispatch()
 
-export default function EventForm({
-  setFormOpen,
-  setEvents,
-  createEvent,
-  selectedEvent,
-  updateEvent
-}) {
+  const selectedEvent = useSelector((state) =>
+    state.event.events.find((e) => e.id === match.params.id)
+  );
+
   const initialValues = selectedEvent ?? {
     title: "",
     category: "",
@@ -27,16 +28,17 @@ export default function EventForm({
   function handleFormSubmit(e) {
     e.preventDefault();
 
-    selectedEvent ?updateEvent({...selectedEvent,...values}) 
-    :
-    createEvent({
-      ...values,
-      id: cuid(),
-      hostedBy: "Me",
-      attendees: [],
-      hostPhotoURL: "/assets/user.png",
-    });
-    setFormOpen(false);
+    selectedEvent
+      ? dispatch(updateEvent({ ...selectedEvent, ...values }))
+      : dispatch(createEvent({
+          ...values,
+          id: cuid(),
+          hostedBy: "Me",
+          attendees: [],
+          hostPhotoURL: "/assets/user.png",
+        }));
+        history.push('/events')
+    
   }
 
   function handleInputChange(e) {
@@ -48,12 +50,12 @@ export default function EventForm({
     <Card
       style={{
         marginTop: "1rem",
-        // textAlign:'center',
+        
         padding: "1rem",
       }}
     >
       <Typography variant="h6" color="primary" component="h2" gutterBottom>
-        {selectedEvent ?'Edit the event':'Create new event'}
+        {selectedEvent ? "Edit the event" : "Create new event"}
       </Typography>
 
       <form noValidate autoComplete="off" onSubmit={handleFormSubmit}>
@@ -147,7 +149,8 @@ export default function EventForm({
           <Button
             type="submit"
             variant="contained"
-            component={Link} to='/events'
+            component={Link}
+            to="/events"
           >
             Cancel
           </Button>
