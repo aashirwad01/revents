@@ -6,7 +6,7 @@ import NavBar from "../../features/nav/NavBar";
 import { green } from "@mui/material/colors";
 import { Container } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
+
 import { Route } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import EventDetailedPage from "../../features/events/eventDetailed/EventDetailedPage";
@@ -43,18 +43,10 @@ const useStyles=makeStyles((theme)=>{
 function App() {
   const classes=useStyles()
 
-  const [formOpen,setFormOpen]=useState(false)
-  const [selectedEvent,setSelectedEvent]=useState(null)
+  
+  
 
-  function handleSelectEvent(event){
-    setSelectedEvent(event)
-    setFormOpen(true)
-  }
-
-  function handleCreateFormOpen(){
-    setSelectedEvent(null)
-    setFormOpen(true)
-  }
+  
 
   return (
     <ThemeProvider theme={theme} >
@@ -63,7 +55,7 @@ function App() {
     <Route path={'/(.+)'} render={()=>(
      <>
 
-<NavBar setFormOpen={handleCreateFormOpen}/>
+<NavBar />
       <Container className={classes.containingEvent}>
        
         <Route exact path='/events' component={EventDashboard} />
