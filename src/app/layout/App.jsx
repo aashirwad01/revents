@@ -12,6 +12,7 @@ import HomePage from "../../features/home/HomePage";
 import EventDetailedPage from "../../features/events/eventDetailed/EventDetailedPage";
 import EventForm from "../../features/events/eventForm/EventForm";
 import Sandbox from "../../features/sandbox/Sandbox";
+import ModalManager from "../common/modals/ModalManager";
 
 const theme = createTheme({
   palette: {
@@ -45,6 +46,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div>
+        <ModalManager/>
         <Route exact path="/" component={HomePage} />
         <Route
           path={"/(.+)"}

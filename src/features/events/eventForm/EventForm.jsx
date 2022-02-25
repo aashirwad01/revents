@@ -1,4 +1,4 @@
-import { Button, Card,  TextField, Typography } from "@mui/material";
+import { Alert, Button, Card,  FormControl,  TextField, Typography } from "@mui/material";
 import React from "react";
 import { Box } from "@mui/material";
 import { useState } from "react";
@@ -6,6 +6,14 @@ import cuid from "cuid";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createEvent, updateEvent } from "../eventActions";
+import { Formik , Form, Field ,ErrorMessage } from "formik";
+import * as Yup from 'yup'
+import MyTextInput from "../../../app/common/form/MyTextInput";
+import MyTextArea from "../../../app/common/form/MyTextArea";
+import MySelectInput from "../../../app/common/form/MySelectInput";
+import { categoryData } from "../../../app/api/categoryOptions";
+import MyDateInput from "../../../app/common/form/MyDateInput";
+
 
 export default function EventForm({ match , history }) {
 
@@ -23,28 +31,37 @@ export default function EventForm({ match , history }) {
     venue: "",
     date: "",
   };
-  const [values, setValues] = useState(initialValues);
 
-  function handleFormSubmit(e) {
-    e.preventDefault();
+  const validationSchema = Yup.object({
+    title:Yup.string().required('You must provide a title'),
+    category:Yup.string().required('You must provide a category'),
+    description:Yup.string().required('You must provide details'),
+    city:Yup.string().required('You must provide a city'),
+    venue:Yup.string().required('You must provide a venue'),
+    date:Yup.string().required('You must provide a date'),
+  })
+  // const [values, setValues] = useState(initialValues);
 
-    selectedEvent
-      ? dispatch(updateEvent({ ...selectedEvent, ...values }))
-      : dispatch(createEvent({
-          ...values,
-          id: cuid(),
-          hostedBy: "Me",
-          attendees: [],
-          hostPhotoURL: "/assets/user.png",
-        }));
-        history.push('/events')
+  // function handleFormSubmit(e) {
+  //   e.preventDefault();
+
+  //   selectedEvent
+  //     ? dispatch(updateEvent({ ...selectedEvent, ...values }))
+  //     : dispatch(createEvent({
+  //         ...values,
+  //         id: cuid(),
+  //         hostedBy: "Me",
+  //         attendees: [],
+  //         hostPhotoURL: "/assets/user.png",
+  //       }));
+  //       history.push('/events')
     
-  }
+  // }
 
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  }
+  // function handleInputChange(e) {
+  //   const { name, value } = e.target;
+  //   setValues({ ...values, [name]: value });
+  // }
 
   return (
     <Card
@@ -54,108 +71,168 @@ export default function EventForm({ match , history }) {
         padding: "1rem",
       }}
     >
-      <Typography variant="h6" color="primary" component="h2" gutterBottom>
-        {selectedEvent ? "Edit the event" : "Create new event"}
+     
+      <Formik 
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        selectedEvent
+        ? dispatch(updateEvent({ ...selectedEvent, ...values }))
+        : dispatch(createEvent({
+            ...values,
+            id: cuid(),
+            hostedBy: "Me",
+            attendees: [],
+            hostPhotoURL: "/assets/user.png",
+          }));
+          history.push('/events')
+        
+      }}
+      validationSchema={validationSchema}
+      
+      >
+        {/* {({values,handleChange,handleSubmit}) =>( */}
+{({isSubmitting,dirty,isValid})=> (
+
+<Form 
+  // noValidate autoComplete="off" onSubmit={handleSubmit}
+  >
+{/* <TextField
+  sx={{ mb: "0.5rem" }}
+  label="Event Title"
+  variant="outlined"
+  color="secondary"
+  fullWidth
+  required
+  value={values.title}
+  onChange={handleChange}
+  name="title"
+/> */}
+ <Typography variant="h6" color="primary" component="h2" gutterBottom>
+        Event Details
       </Typography>
 
-      <form noValidate autoComplete="off" onSubmit={handleFormSubmit}>
-        <TextField
-          sx={{ mb: "0.5rem" }}
-          label="Event Title"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          required
-          value={values.title}
-          onChange={(e) => handleInputChange(e)}
-          name="title"
-        />
+<Box sx={{display:'flex' , flexDirection:'column'}}>
+<MyTextInput name='title' placeholder='Event title'/>
 
-        <TextField
-          label="Category"
-          sx={{ mb: "0.5rem" }}
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          required
-          value={values.category}
-          onChange={(e) => handleInputChange(e)}
-          name="category"
-        />
+{/* <Field style={{padding:'1rem' , marginTop:'1rem'}} name='title' placeholder='Event title' />
+<ErrorMessage name='title' render={error => <Alert severity="error">{error}</Alert> }  /> */}
 
-        <TextField
-          label="Description"
-          sx={{ mb: "0.5rem" }}
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          required
-          value={values.description}
-          onChange={(e) => handleInputChange(e)}
-          name="description"
-        />
+<MySelectInput  name='category' placeholder='Event category' options={categoryData} />
+<MyTextArea  name='description' placeholder='Event description' />
+<Typography variant="h6" color="primary" component="h2" gutterBottom>
+        Event Location Details
+      </Typography>
 
-        <TextField
-          label="City"
-          sx={{ mb: "0.5rem" }}
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          required
-          value={values.city}
-          onChange={(e) => handleInputChange(e)}
-          name="city"
-        />
+<MyTextInput  name='city' placeholder='City' />
+<MyTextInput  name='venue' placeholder='Venue' />
+<MyDateInput  name='date' placeholderText='Event date' 
+timeFormat='HH:mm'
+showTimeSelect
+timeCaption='true'
+dateFormat='MMMM d, yyyy h:mm a'
 
-        <TextField
-          label="Venue"
-          sx={{ mb: "0.5rem" }}
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          required
-          value={values.venue}
-          onChange={(e) => handleInputChange(e)}
-          name="venue"
-        />
 
-        <TextField
-          sx={{ mb: "0.5rem" }}
-          variant="outlined"
-          color="secondary"
-          type="date"
-          fullWidth
-          required
-          value={values.date}
-          onChange={(e) => handleInputChange(e)}
-          name="date"
-        />
+/>
+</Box>
+{/* <TextField
+  label="Category"
+  sx={{ mb: "0.5rem" }}
+  variant="outlined"
+  color="secondary"
+  fullWidth
+  required
+  value={values.category}
+  onChange={handleChange}
+  name="category"
+/> */}
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button
-            sx={{ mr: "0.5rem" }}
-            type="submit"
-            color="success"
-            variant="contained"
-          >
-            Submit
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            component={Link}
-            to="/events"
-          >
-            Cancel
-          </Button>
-        </Box>
-      </form>
+{/* <TextField
+  label="Description"
+  sx={{ mb: "0.5rem" }}
+  variant="outlined"
+  color="secondary"
+  fullWidth
+  required
+  value={values.description}
+  onChange={handleChange}
+  name="description"
+/> */}
+
+{/* <TextField
+  label="City"
+  sx={{ mb: "0.5rem" }}
+  variant="outlined"
+  color="secondary"
+  fullWidth
+  required
+  value={values.city}
+  onChange={handleChange}
+  name="city"
+/> */}
+
+{/* <TextField
+  label="Venue"
+  sx={{ mb: "0.5rem" }}
+  variant="outlined"
+  color="secondary"
+  fullWidth
+  required
+  value={values.venue}
+  onChange={handleChange}
+  name="venue"
+/> */}
+
+{/* <TextField
+  sx={{ mb: "0.5rem" }}
+  variant="outlined"
+  color="secondary"
+  type="date"
+  fullWidth
+  required
+  value={values.date}
+  onChange={handleChange}
+  name="date"
+/> */}
+
+<Box
+  sx={{
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  }}
+>
+  <Button
+
+    sx={{ mr: "0.5rem" }}
+    disabled={!isValid || !dirty || isSubmitting}
+    type="submit"
+    color="success"
+    variant="contained"
+  >
+    Submit
+  </Button>
+  <Button
+    type="submit"
+    disabled={isSubmitting}
+    variant="contained"
+    component={Link}
+    to="/events"
+  >
+    Cancel
+  </Button>
+</Box>
+</Form>
+
+
+
+
+)
+
+}
+
+        {/* )} */}
+      
+      </Formik>
     </Card>
   );
 }

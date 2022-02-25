@@ -1,6 +1,8 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { format } from "date-fns";
+
 
 const eventImageStyle = {
     minHeight:'20rem',
@@ -38,7 +40,7 @@ export default function EventDetailHeader({event}) {
         <Typography   gutterBottom variant="h5" component="div">
           {event.title}
         </Typography>
-        <p>{event.date}</p>
+        <p> {format(event.date,'MMMM d, yyyy h:mm a')}</p>
         <p>Hosted By <strong>{event.hostedBy}</strong></p>
        
       </CardContent>

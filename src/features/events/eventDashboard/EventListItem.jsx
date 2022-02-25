@@ -18,6 +18,7 @@ import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteEvent } from "../eventActions";
+import { format } from "date-fns";
 
 
 
@@ -50,7 +51,7 @@ export default function EventListItem({ event }) {
                   marginLeft: "0.2rem",
                 }}
               >
-                {event.date}
+                {format(event.date,'MMMM d, yyyy h:mm a')}
               </span>
               <RoomIcon />
               <span

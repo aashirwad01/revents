@@ -3,6 +3,8 @@ import React from 'react'
 import InfoIcon from '@mui/icons-material/Info';
 import EventIcon from '@mui/icons-material/Event';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { format } from "date-fns";
+
 
 export default function EventDetailInfo({event}) {
   return (
@@ -42,7 +44,7 @@ export default function EventDetailInfo({event}) {
               marginLeft: "1rem",
             }}
           >
-            {event.date}
+            {format(event.date,'MMMM d, yyyy h:mm a')}
           </span>
           </Box>
     </CardContent>
