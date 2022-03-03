@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 import SignedOutMenu from "./SignedOutMenu";
 import SignedInMenu from "./SignedInMenu";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -34,15 +35,16 @@ const useStyles = makeStyles((theme) => {
 
 export default function NavBar({ setFormOpen }) {
 
-  const history = useHistory();
+  // const history = useHistory();
   
-  const [authenticated, setAuthenticated] = useState(false);
+  // const [authenticated, setAuthenticated] = useState(false);
+  const {authenticated}= useSelector(state => state.auth)
   const classes = useStyles();
 
-  function handleSignOut(){
-    setAuthenticated(false)
-    history.push('/')
-  }
+  // function handleSignOut(){
+  //   // setAuthenticated(false)
+  //   history.push('/')
+  // }
 
   return (
     <AppBar  position="sticky" className={classes.appbar}>
@@ -167,7 +169,14 @@ export default function NavBar({ setFormOpen }) {
           
 
 
-          {authenticated ? <SignedInMenu signOut={handleSignOut} /> : <SignedOutMenu setAuthenticated={setAuthenticated} />}
+          {authenticated ? 
+          <SignedInMenu 
+          
+          // signOut={handleSignOut} 
+          /> : 
+          <SignedOutMenu 
+          // setAuthenticated={setAuthenticated} 
+          />}
         </Toolbar>
       </Container>
     </AppBar>

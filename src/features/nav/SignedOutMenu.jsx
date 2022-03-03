@@ -1,11 +1,18 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { openModal } from "../../app/common/modals/modalReducer";
 
 export default function SignedOutMenu({ setAuthenticated }) {
+
+  const dispatch = useDispatch()
+
+
   return (
     <Box position="right" sx={{ display: "flex", flexDirection: "row" }}>
       <Button
-        onClick={() => setAuthenticated(true)}
+        // onClick={() => setAuthenticated(true)}
+        onClick={() => dispatch(openModal({modalType:'LoginForm'}))}
         variant="outlined"
         color="inherit"
         edge="end"

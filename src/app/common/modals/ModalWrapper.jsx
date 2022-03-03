@@ -1,7 +1,9 @@
-import { Box, Card, Modal, Typography } from '@mui/material';
+import { Box, Card, Grid, Modal, Typography } from '@mui/material';
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { closeModal } from './modalReducer';
+
+
 
 export default function ModalWrapper({children,header}) {
     const dispatch = useDispatch();
@@ -12,13 +14,28 @@ export default function ModalWrapper({children,header}) {
     width: "50%",
     height:"100%"}}
     onClose={()=>dispatch(closeModal())}  >
-        <Card>
-        {header && <Typography>{header}</Typography>}
+
+
+<Grid
+  container
+  spacing={0}
+  direction="column"
+  alignItems="center"
+  justify="center"
+  style={{ minHeight: '100vh' }}
+ >
+
+  <Grid item xs={3}>
+  <Card>
+        {header && <Typography align="center">{header}</Typography>}
         <Box>
         {children}
         </Box>
         
         </Card>
+  </Grid>      
+ </Grid>
+        
        
     </Modal>
   )
