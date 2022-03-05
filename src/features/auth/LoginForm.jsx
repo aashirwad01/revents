@@ -50,8 +50,9 @@ export default function LoginForm() {
     
     <MyTextInput name='email'/>
     <MyTextInput name='password' placeholder='Password' type='password' />
-    <Button label='submit'
+    <LoadingButton label='submit'
     type='submit'
+    loading={isSubmitting}
 
    
    sx={{margin:'1rem 0'}}
@@ -60,7 +61,7 @@ export default function LoginForm() {
    
     variant="contained">
 
-       Login </Button>
+       Login </LoadingButton>
 
        </FormControl>
    
