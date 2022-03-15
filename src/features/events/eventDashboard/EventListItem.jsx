@@ -19,12 +19,14 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteEvent } from "../eventActions";
 import { format } from "date-fns";
+import { deleteEventInFirestore } from "../../../app/firestore/firestoreService";
 
 
 
 export default function EventListItem({ event }) {
 
   const dispatch =useDispatch()
+
 
   return (
     <div>
@@ -34,7 +36,11 @@ export default function EventListItem({ event }) {
             avatar={<Avatar src={event.hostPhotoURL} alt="avatar"></Avatar>}
             title={event.title}
             subheader={"Hosted By " + event.hostedBy}
+            
           />
+          {event.isCancelled && (
+              <span style={{color:'red', marginRight: "0.2rem",marginLeft: "1rem"}}>Event is cancelled</span>
+            )}
 
           <CardContent>
             <Divider style={{ marginBottom: "0.5rem" }} color="black" />
@@ -45,6 +51,8 @@ export default function EventListItem({ event }) {
                 flexWrap: "wrap",
               }}
             >
+
+             
               <WatchLaterIcon />
               <span
                 style={{
@@ -112,7 +120,12 @@ export default function EventListItem({ event }) {
             sx={{ marginRight: "1rem", backgroundColor: "red" }}
             variant="contained"
             edge="end"
-            onClick={() => dispatch(deleteEvent(event.id))}
+            onClick={() => deleteEventInFirestore(event.id)
+              
+              
+              // dispatch(deleteEvent(event.id))
+            
+            }
           >
             Delete
           </Button>

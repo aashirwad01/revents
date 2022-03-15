@@ -5,7 +5,7 @@ import { useState } from "react";
 import cuid from "cuid";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createEvent, updateEvent } from "../eventActions";
+import { createEvent, listenToEvents, updateEvent } from "../eventActions";
 import { Formik , Form, Field ,ErrorMessage } from "formik";
 import * as Yup from 'yup'
 import MyTextInput from "../../../app/common/form/MyTextInput";
@@ -13,15 +13,38 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryData } from "../../../app/api/categoryOptions";
 import MyDateInput from "../../../app/common/form/MyDateInput";
-
+import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
+import { addEventToFirestore, cancelEventToggle, listenToEventFromFirestore, listenToEventsFromFirestore, updateEventInFirestore } from "../../../app/firestore/firestoreService";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
+import { Dialog } from "@mui/material";
+import { DialogTitle } from "@mui/material";
+import { DialogContent } from "@mui/material";
+import { DialogContentText } from "@mui/material";
+import { DialogActions } from "@mui/material";
 
 export default function EventForm({ match , history }) {
 
   const dispatch=useDispatch()
 
+  const [loadingCancel , setloadingCancel] =useState(false)
+  const [open, setOpen] = React.useState(false);
+
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+
   const selectedEvent = useSelector((state) =>
     state.event.events.find((e) => e.id === match.params.id)
   );
+
+  const {loading,error} = useSelector(state => state.async)
 
   const initialValues = selectedEvent ?? {
     title: "",
@@ -40,6 +63,40 @@ export default function EventForm({ match , history }) {
     venue:Yup.string().required('You must provide a venue'),
     date:Yup.string().required('You must provide a date'),
   })
+
+
+  async function handleCancelToggle(event){
+    setOpen(false)
+    setloadingCancel(true)
+    try{
+      await cancelEventToggle(event)
+      setloadingCancel(false)
+
+    }catch(error){
+      setloadingCancel(true)
+      toast.error(error.message)
+    }
+  }
+
+
+
+
+
+  useFirestoreDoc({
+    shouldExcecute: !!match.params.id,
+    query: () => listenToEventFromFirestore(match.params.id),
+    data: (event) => dispatch(listenToEvents([event])),
+    deps:[match.params.id,dispatch],
+  });
+
+  // || (!selectedEvent && !error)
+
+  if(loading ) return <LoadingComponent />
+  if(error) return <Redirect to='/error' />
+
+  
+
+
   // const [values, setValues] = useState(initialValues);
 
   // function handleFormSubmit(e) {
@@ -74,17 +131,32 @@ export default function EventForm({ match , history }) {
      
       <Formik 
       initialValues={initialValues}
-      onSubmit={(values) => {
-        selectedEvent
-        ? dispatch(updateEvent({ ...selectedEvent, ...values }))
-        : dispatch(createEvent({
-            ...values,
-            id: cuid(),
-            hostedBy: "Me",
-            attendees: [],
-            hostPhotoURL: "/assets/user.png",
-          }));
+      onSubmit={ async (values , {setSubmitting}) => {
+
+        try{
+          selectedEvent
+        ? await updateEventInFirestore(values)
+        // dispatch(updateEvent({ ...selectedEvent, ...values }))
+        : 
+        await addEventToFirestore(values);
+        setSubmitting(false)
+        // dispatch(createEvent({
+        //     ...values,
+        //     id: cuid(),
+        //     hostedBy: "Me",
+        //     attendees: [],
+        //     hostPhotoURL: "/assets/user.png",
+        //   }));
           history.push('/events')
+
+        }catch(error){
+
+          console.log(error.message)
+        
+          toast.error(error.message)
+          setSubmitting(false)
+        }
+        
         
       }}
       validationSchema={validationSchema}
@@ -201,8 +273,10 @@ dateFormat='MMMM d, yyyy h:mm a'
     justifyContent: "flex-end",
   }}
 >
-  <Button
+  
+  <LoadingButton
 
+    loading={isSubmitting}
     sx={{ mr: "0.5rem" }}
     disabled={!isValid || !dirty || isSubmitting}
     type="submit"
@@ -210,7 +284,7 @@ dateFormat='MMMM d, yyyy h:mm a'
     variant="contained"
   >
     Submit
-  </Button>
+  </LoadingButton>
   <Button
     type="submit"
     disabled={isSubmitting}
@@ -220,6 +294,27 @@ dateFormat='MMMM d, yyyy h:mm a'
   >
     Cancel
   </Button>
+
+  {selectedEvent && <LoadingButton
+  
+  loading={loadingCancel}
+   type='button'
+   onClick={(e)=>{ 
+     setOpen(true)
+    // cancelEventToggle(selectedEvent)
+    e.preventDefault() 
+
+  
+  
+  }}
+    color={selectedEvent.isCancelled ? 'success' : 'error' }
+    variant="contained"
+    component={Link}
+    to="/events"
+  >
+    {selectedEvent.isCancelled ? 'Reactivate Event' : 'Cancel Event' }
+  </LoadingButton>}
+  
 </Box>
 </Form>
 
@@ -233,6 +328,31 @@ dateFormat='MMMM d, yyyy h:mm a'
         {/* )} */}
       
       </Formik>
+
+     
+
+      <Dialog
+        open={open}
+        onClose={()=> setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+        {selectedEvent?.isCancelled? ' Reactivate ' : ' Cancel '}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {selectedEvent?.isCancelled? ' This will reactivate the event are you sure ' : ' This will cancel the event are your sure ?'}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=> setOpen(false)} >Cancel</Button>
+          <Button onClick={()=> handleCancelToggle(selectedEvent) } autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Card>
   );
 }
