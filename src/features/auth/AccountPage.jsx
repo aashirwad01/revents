@@ -15,10 +15,15 @@ import MyTextInput from '../../app/common/form/MyTextInput'
 import GoogleIcon from '@mui/icons-material/Google';
 import { Link } from 'react-router-dom'
 import { updateUserPassword } from '../../app/firestore/firestoreService'
+import LoadingComponent from '../../app/layout/LoadingComponent'
 
 export default function AccountPage() {
 
+
+
     const {currentUser} = useSelector(state=>state.auth)
+
+    
   return (
     <Grid
     container

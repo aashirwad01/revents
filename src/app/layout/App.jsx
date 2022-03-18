@@ -57,6 +57,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div>
+     
         <ModalManager/>
         <ToastContainer position="bottom-right" theme="colored" />
         <Route exact path="/" component={HomePage} />
