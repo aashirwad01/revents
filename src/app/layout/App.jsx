@@ -15,6 +15,9 @@ import Sandbox from "../../features/sandbox/Sandbox";
 import ModalManager from "../common/modals/ModalManager";
 import { ToastContainer } from "react-toastify";
 import ErrorComponent from "../common/errors/ErrorComponent";
+import AccountPage from "../../features/auth/AccountPage";
+import { useSelector } from "react-redux";
+import LoadingComponent from "./LoadingComponent";
 
 const theme = createTheme({
   palette: {
@@ -44,6 +47,12 @@ function App() {
   const classes = useStyles();
 
   const { key } = useLocation();
+  const {initialized} = useSelector((state)=> state.async)
+
+  if(!initialized) {
+    
+    return <LoadingComponent/>
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -67,6 +76,7 @@ function App() {
                   key={key}
                 />
                 <Route path='/error' component={ ErrorComponent } />
+                <Route path='/account' component={ AccountPage } />
               </Container>
             </>
           )}

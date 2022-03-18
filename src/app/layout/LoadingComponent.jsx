@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 export default function LoadingComponent({content='Loading ...'}) {
     
     const {loading} = useSelector(state => state.async)
-  
+    // FF0000
   return (
     <div>
        <Backdrop
@@ -13,7 +13,7 @@ export default function LoadingComponent({content='Loading ...'}) {
       open={loading}
     >
       
-      <CircularProgress color="inherit" />
+      <CircularProgress color= 'inherit' />
 
       
     </Backdrop>

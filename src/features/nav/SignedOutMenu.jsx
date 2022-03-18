@@ -26,6 +26,7 @@ export default function SignedOutMenu({ setAuthenticated }) {
         Login
       </Button>
       <Button
+       onClick={() => dispatch(openModal({modalType:'RegisterForm'}))}
         variant="outlined"
         color="inherit"
         edge="end"

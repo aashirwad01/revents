@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { signoutUser } from "../auth/authActions";
+import { toast } from "react-toastify";
+import {signOutFirebase} from '../../app/firestore/firebaseService' 
 
 export default function SignedInMenu() {
   const [age, setAge] = React.useState("");
@@ -25,12 +27,24 @@ export default function SignedInMenu() {
 
   const {currentUser} = useSelector(state=>state.auth)
 
+  async function handleSignOut(){
+    try{
+      history.push('/')
+      await signOutFirebase();
+     
+
+    }catch(error){
+      toast.error(error.message)
+     
+    }
+  }
+
   //   <Avatar src="/assets/user.png" sx={{marginLeft:'1rem'}}/>
   return (
     <Box sx={{ marginLeft: "1rem" }}>
       <FormControl fullWidth>
         <InputLabel sx={{ color: "white"  }} id="demo-simple-select-label">
-          {currentUser.email}
+          {currentUser.displayName}
         </InputLabel>
         <Select
           sx={{ width: { sm: "12rem", xs: "0rem" } }}
@@ -59,13 +73,13 @@ export default function SignedInMenu() {
           >
             My Profile
           </MenuItem>
+          <MenuItem component={Link} to="/account">
+           My account
+          </MenuItem>
           <MenuItem
             // component={Link}
             // to='/create'
-            onClick={() => {
-              dispatch(signoutUser());
-              history.push("/");
-            }}
+            onClick={handleSignOut}
           >
             SignOut
           </MenuItem>

@@ -8,35 +8,35 @@ import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux'
 import { signInUser } from './authActions'
 import { closeModal } from '../../app/common/modals/modalReducer'
-import { signInWithEmail } from '../../app/firestore/firebaseService'
-import { Typography } from '@mui/material'
+import { registerInFirebase, signInWithEmail } from '../../app/firestore/firebaseService'
 import { Alert } from '@mui/material'
 import { Divider } from '@mui/material'
 import SocialLogin from './SocialLogin'
 
-export default function LoginForm() {
+export default function RegisterForm() {
 
     const dispatch = useDispatch()
 
   return (
     <ModalWrapper 
-    header='Sign In to Revents'>
+    header='Register to Revents'>
         <Formik
-        initialValues={{email:'',password:''}}
+        initialValues={{displayName:'',email:'',password:''}}
         validationSchema={Yup.object({
+            displayName:Yup.string().required(),
             email:Yup.string().required().email(),
             password:Yup.string().required()
         })}
         onSubmit=  {async(values,{setSubmitting , setErrors}) => {
           try{
             
-            await signInWithEmail(values)
+            await registerInFirebase(values)
             // dispatch( signInUser(values))
             setSubmitting(false)
             
             dispatch(closeModal())
           }catch(e){
-            setErrors({auth:e.message})
+              setErrors({auth:e.message})
             setSubmitting(false)
             
           }
@@ -56,9 +56,10 @@ export default function LoginForm() {
 
             
     
-    <MyTextInput name='email'/>
-    <MyTextInput name='password' placeholder='Password' type='password' />
+    <MyTextInput name='email' placeholder='Email Address' />
+    <MyTextInput name='displayName' placeholder='Display Name' />
 
+    <MyTextInput name='password' placeholder='Password' type='password' />
     {errors.auth && <Alert sx={{mt:'10px'}} severity="error">{errors.auth}</Alert>}
     <LoadingButton label='submit'
     type='submit'
@@ -71,10 +72,9 @@ export default function LoginForm() {
    
     variant="contained">
 
-       Login </LoadingButton>
+       Register </LoadingButton>
 
-       <Divider sx={{mb:'10px'}} color='black'
-       />
+       <Divider sx={{mb:'10px'}} color='black'/>
        <SocialLogin/>
 
        </FormControl>
